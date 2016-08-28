@@ -1,0 +1,1 @@
+All files that contain useful game-wide rules, macros, classes, structs, etc. go in this folder.

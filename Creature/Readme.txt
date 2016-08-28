@@ -1,0 +1,1 @@
+Every class that inherits from Creature goes in this folder.
