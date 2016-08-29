@@ -3,8 +3,8 @@
 #include "stdint.h"
 #include <list>
 
-#include "DnDUtil.h"
-#include "CreatureUtil.h"
+#include "Utility/DnDUtil.h"
+#include "Utility\CreatureUtil.h"
 
 // a class that represents a creature with hit points and other basic stats
 class Creature {
@@ -26,6 +26,9 @@ protected:
   // languages known (TODO: does not take into account can read vs. can speak)
   std::list<eLanguage::Type> languages_;
 
+  // spellcasting
+  eAbility::Type spellcasting_ability_; // if MAX, can't cast spells
+
   // Initialize all modifiers to 0
   void InitModifiers() {
     for (int i = 0; i < eAbility::MAX; i++) {
@@ -35,8 +38,17 @@ protected:
 
 
 public:
-  Creature(uint32_t str, uint32_t dex, uint32_t con, uint32_t intel, uint32_t wis, uint32_t cha,
-           uint32_t speed, std::list<eLanguage::Type> languages) {
+  Creature(uint32_t str,
+           uint32_t dex,
+           uint32_t con,
+           uint32_t intel,
+           uint32_t wis,
+           uint32_t cha,
+           uint32_t speed,
+           const std::list<eLanguage::Type> &languages,
+           eAbility::Type spellcasting_ability)
+      : languages_(languages), spellcasting_ability_(spellcasting_ability) {
+
     abilities_[eAbility::STR] = str;
     abilities_[eAbility::DEX] = dex;
     abilities_[eAbility::CON] = con;
@@ -45,6 +57,7 @@ public:
     abilities_[eAbility::CHA] = cha;
 
     InitModifiers();
+    spellcasting_ability_ = eAbility::MAX;
   }
 
   // get strength modifier with all modifiers taken into account
@@ -90,10 +103,24 @@ public:
   }
 
   // get saving throw modifier for the given ability
-  // left as virtual because method for storing saving throws will be different for monsters and players
+  // left as virtual because method for storing saving throws will be different for monsters and characters
   virtual int32_t SavingThrowMod(eAbility::Type a) {}
 
   // get the bonus to a specififc skill
-  // left as virtual because method for storing skills will be different for monsters and players
+  // left as virtual because method for storing skills will be different for monsters and characters
   virtual int32_t Skill(eSkill::Type s) {}
+
+  // get the spell DC for this creature
+  // left as virtual because method for calculating spell DC will be different for monsters and characters
+  // if returns 0, can't cast spells
+  virtual uint32_t SpellDC() {}
+
+  // calculate this creature's armor class and return it
+  // left as virtual because method will be different for monsters and characters
+  virtual uint32_t AC() {}
+
+  // make an attack on a target, returns whether it hits
+  // left as virtual since this will be different for monsters and characters
+  // @param attack_index: the index in the Creature's list of attacks that represents which attack they are making
+  virtual bool Attack(uint32_t attack_index, Creature *target) {}
 };

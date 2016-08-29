@@ -45,7 +45,7 @@ namespace eSkill {
   };
 }
 
-// all lnaguages in 5th edition, copied from here: https://olddungeonmaster.wordpress.com/2012/06/27/dd-languages/
+// all languages in 5th edition, copied from here: https://olddungeonmaster.wordpress.com/2012/06/27/dd-languages/
 namespace eLanguage {
   enum Type : uint32_t {
     ABYSSAL = 0,
@@ -73,3 +73,17 @@ namespace eLanguage {
     MAX
   };
 };
+
+// the different types of dice, useful for attack damage
+namespace eDice {
+  enum Type : uint32_t {
+    D4 = 0,
+    D6,
+    D8,
+    D10,
+    D12,
+    D20,
+    D100,
+    MAX
+  };
+}

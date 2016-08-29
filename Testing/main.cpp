@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include <cmath>
 
-#include "Creature.h"
+#include "Creature/Creature.h"
 
 void main() {
   /*for (int i = 0; i < 22; i++) {
